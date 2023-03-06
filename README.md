@@ -31,7 +31,7 @@ reader_ct-Integer(0)
 
 - read_mx:This is used as a write-access to modfiy the reader_ct variable.Any reader that enters/exits the critical section must first acquire it before leaving/entering .
 
-- wrt_mx:This is used to give access to the critical section to both reader's and the Writer,has to be obtained by every writer before entering the critical section and signalled every time it exits the section, but only the first reader has to acquire this semaphore to enter the critcal section.
+- wrt_mx:This is used to give access to the critical section to both reader's and the Writer,has to be obtained by every writer before entering the critical section and signalled every time it exits the section, but only the first reader has to acquire this semaphore to enter the critcal section and only the last reader to exit the critical section has to signal it .
 
 - entry_mx:This has to obtained before anyone(reader/writer) gets the access to wrt_mx  variable to access the critical section or if a writer access the critical section direclty .This mutex ensured bounded waiting for the writer,let's assume a reader comes in between 2 writers so in order to get access to the critical section both the reader and writer would have to get access to the entry_mx semaphore as there are some process currently in the critical section both would be put in the blocked queue of the entry_mx semaphore ,as FIFO is followed the reader would first get access to the semaphore .Thus readers and writers are now at equal priority and none would starve.
 
