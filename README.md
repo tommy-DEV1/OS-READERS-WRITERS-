@@ -51,7 +51,7 @@ wait(entry_mx);//first have to access the entry mutex
 wait(read_mx);//to get mutually exclusive access to modify Reader_ct
 Reader_ct+=1;
 if(Reader_ct==1)wait(wrt_mx);//if the first Reader to access the critical section has to access wrt_mx 
-signal(read_mx);// allow other reader's to modify the Reader_ct and enter the critical section
+signal(read_mx);// allow other reader to modify the Reader_ct and enter the critical section
 signal(entry_mx);// allow other writer or Reader to get access to the entry mutex
 [critical section]
 wait(read_mx);//to get mutually exclusive access to modify Reader_ct
