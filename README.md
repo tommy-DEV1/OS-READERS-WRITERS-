@@ -31,25 +31,22 @@ reader_ct-Integer(0)
 
 - read_mx:This is used as a write-access to modfiy the reader_ct variable.Any reader that enters/exits the critical section must first acquire it before leaving/entering .
 
-- wrt_mx:This is used to give access to the critical section to both reader's and the Writer,has to be obtained by every writer before entering the critical section and signalled every time it exits the section, but only the first reader has to acquire this semaphore to enter the critcal section and only the last reader to exit the critical section has to signal it .
+- wrt_mx:This is used to give access to the critical section to both reader's and the Writer,has to be obtained by every writer before entering the critical section and signalled every time it exits the section, but only the first reader has to acquire this semaphore to enter the critcal section.
 
-- entry_mx:This has to obtained before anyone(reader/writer) gets the access to wrt_mx  variable to access the critical section or if a writer access the critical section direclty .This mutex ensured bounded waiting for the writer,let's assume a reader comes in between 2 writers so in order to get access to the critical section both the reader and writer would have to get access to the entry_mx semaphore as there are some process currently in the critical section both would be put in the blocked queue of the entry_mx semaphore ,as FIFO is followed the reader would first get access to the semaphore .Thus readers and writers are now at equal priority and none would starve.
+- entry_mx:This has to obtained before anyone(reader/writer) gets the access to wrt_mx  variable to access the critical section or if a writer access the critical section direclty .This mutex ensured bounded waiting for the writer,let's assume a writer comes in between 2 reader so in order to get access to the critical section the writer as it comes first would acquire the entry_mx and the reader that comes after would be blocked,even if there are some reader's present in the critical section after they exit the reader would get the priority to get access to the wrt_mx as it would be on the top of the blocked queue of the wrt_mx .
+Thus readers and writers are now at equal priority and none would starve ,this is an effiecient and starve-free solution to the Reader-Writer problem.
 
 ## writer's pseudocode 
 ```bash
-do{
  wait(entry_mx);//first have to access the entry mutex 
  wait(wrt_mx);// access the wrt_mx to ensure mutual exclusion between Reader and writer
  [critical section]
  signal(wrt_mx);//relase the wrt mutex 
  signal(entry_mx);//allow other Reader or writer to enter the critical section 
- }
- while(true)
 ```
 
 ## Reader's pseudocode
 ```bash
-do(
 wait(entry_mx);//first have to access the entry mutex 
 wait(read_mx);//to get mutually exclusive access to modify Reader_ct
 Reader_ct+=1;
@@ -61,6 +58,4 @@ wait(read_mx);//to get mutually exclusive access to modify Reader_ct
 Reader_ct-=1;
 if(Reader_ct==0)signal(wrt_mx);//if the last Reader to exit the critical section so signal wrt_mx so that waiting writer can get access to the critical section
 signal(read_mx);allow other writer to modify the Reader_ct and enter the critical section
-}
-while(true)
 ``` 
