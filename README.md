@@ -38,15 +38,18 @@ Thus readers and writers are now at equal priority and none would starve ,this i
 
 ## writer's pseudocode 
 ```bash
+while(true){
  wait(entry_mx);//first have to access the entry mutex 
  wait(wrt_mx);// access the wrt_mx to ensure mutual exclusion between Reader and writer
  [critical section]
  signal(wrt_mx);//relase the wrt mutex 
  signal(entry_mx);//allow other Reader or writer to enter the critical section 
+ }
 ```
 
 ## Reader's pseudocode
 ```bash
+while(true){
 wait(entry_mx);//first have to access the entry mutex 
 wait(read_mx);//to get mutually exclusive access to modify Reader_ct
 Reader_ct+=1;
@@ -58,4 +61,5 @@ wait(read_mx);//to get mutually exclusive access to modify Reader_ct
 Reader_ct-=1;
 if(Reader_ct==0)signal(wrt_mx);//if the last Reader to exit the critical section so signal wrt_mx so that waiting writer or reader  can get access to the critical section
 signal(read_mx);allow other writer to modify the Reader_ct and enter the critical section
+}
 ``` 
