@@ -56,6 +56,6 @@ signal(entry_mx);// allow other writer or Reader to get access to the entry mute
 [critical section]
 wait(read_mx);//to get mutually exclusive access to modify Reader_ct
 Reader_ct-=1;
-if(Reader_ct==0)signal(wrt_mx);//if the last Reader to exit the critical section so signal wrt_mx so that waiting writer can get access to the critical section
+if(Reader_ct==0)signal(wrt_mx);//if the last Reader to exit the critical section so signal wrt_mx so that waiting writer or reader  can get access to the critical section
 signal(read_mx);allow other writer to modify the Reader_ct and enter the critical section
 ``` 
