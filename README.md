@@ -27,7 +27,7 @@ wrt_mx-Semaphore(1)
 reader_ct-Integer(0)
 
 
-- reader_ct:This is a count variable and is used to store the number of Writers active in the critical section.
+- reader_ct:This is a count variable and is used to store the number of readers active in the critical section.
 
 - read_mx:This is used as a write-access to modfiy the reader_ct variable.Any reader that enters/exits the critical section must first acquire it before leaving/entering .
 
