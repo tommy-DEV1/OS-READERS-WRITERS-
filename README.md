@@ -38,10 +38,10 @@ reader_ct-Integer(0)
 ## writer's pseudocode 
 ```bash
  wait(entry_mx);//first have to access the entry mutex 
- wait(wrt_mx);// access the wrt_mx to ensure mutual exclusion between Reader's and writer's
+ wait(wrt_mx);// access the wrt_mx to ensure mutual exclusion between Reader and writer
  [critical section]
  signal(wrt_mx);//relase the wrt mutex 
- signal(entry_mx);//allow other Reader's/writer's to enter the critical section 
+ signal(entry_mx);//allow other Reader or writer to enter the critical section 
 ```
 
 ## Reader's pseudocode
@@ -50,11 +50,11 @@ wait(entry_mx);//first have to access the entry mutex
 wait(read_mx);//to get mutually exclusive access to modify Reader_ct
 Reader_ct+=1;
 if(Reader_ct==1)wait(wrt_mx);//if the first Reader to access the critical section has to access wrt_mx 
-signal(read_mx);// allow other writer's to modify the Reader_ct and enter the critical section
-signal(entry_mx);// allow other writer's/Reader's to get access to the entry mutex
+signal(read_mx);// allow other writer to modify the Reader_ct and enter the critical section
+signal(entry_mx);// allow other writer or Reader to get access to the entry mutex
 [critical section]
 wait(read_mx);//to get mutually exclusive access to modify Reader_ct
 Reader_ct-=1;
-if(Reader_ct==0)signal(wrt_mx);//if the last Reader to exit the critical section so signal wrt_mx so that waiting writer's can get access to the critical section
-signal(read_mx);allow other writer's to modify the Reader_ct and enter the critical section
+if(Reader_ct==0)signal(wrt_mx);//if the last Reader to exit the critical section so signal wrt_mx so that waiting writer can get access to the critical section
+signal(read_mx);allow other writer to modify the Reader_ct and enter the critical section
 ``` 
